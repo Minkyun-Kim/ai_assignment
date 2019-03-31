@@ -12,8 +12,8 @@ class singleLayer :
 
     def ScoreFunction(self, X): # \Score값 계산 -> 직접작성
         #3.2
-        ScoreMatrix = np.matmul(X, self.W) + self.B
-        return ScoreMatrix
+        scoreMatrix = np.matmul(X, self.W) + self.B
+        return scoreMatrix
 
     def Softmax(self, ScoreMatrix): # 제공.
         if ScoreMatrix.ndim == 2:
@@ -28,19 +28,14 @@ class singleLayer :
 
     def LossFunction(self, y_predict, Y): #  Loss Function을 구하십시오 -> 직접 작성
         #3.3
-        loss = 0.0
         case_size = y_predict.shape[0]
-        class_size = y_predict.shape[1]
-        for i in range(case_size):
-            for j in range(class_size):
-                loss += Y[i][j] * (-np.log(y_predict[i][j]))
-        loss /= case_size
+        loss = np.sum(Y*-np.log(y_predict + 1e-7)) / case_size
         return loss
 
     def Forward(self, X, Y): # ScoreFunction과 Softmax, LossFunction를 적절히 활용해 y_predict 와 loss를 리턴시키는 함수. -> 직접 작성
         #3.4
-        ScoreMatrix = self.ScoreFunction(X)
-        y_predict = self.Softmax(ScoreMatrix)
+        scoreMatrix = self.ScoreFunction(X)
+        y_predict = self.Softmax(scoreMatrix)
         loss = self.LossFunction(y_predict, Y)
         return y_predict, loss
 
@@ -78,13 +73,13 @@ class singleLayer :
 
     # Forward와 BackPropagationAndTraining, Accuracy를 사용하여서 Training을 epoch만큼 시키고, 10번째 트레이닝마다
     # Training Set의 Accuracy 값과 Test Set의 Accuracy를 print 하십시오
-
     def Optimization(self, X_train, Y_train, X_test, Y_test, learning_rate = 0.01, epoch=100):
         for i in range(epoch):
             #3.6
             y_predict, loss = self.Forward(X_train, Y_train)
             delta_W, delta_B = self.BackPropagation(X_train, y_predict, Y_train)
             self.W += -learning_rate * delta_W
+            self.B += -learning_rate * delta_B
             #함수 작성
             if i % 10 == 0:
                 train_accuracy = self.Accuracy(X_train, Y_train)

@@ -28,9 +28,9 @@ def is_number(s):
 def TestSN(input_i, x_train, y_train, x_test, y_test, W, Bias): #test 이미지를 하나 뽑고 singleNN.py의 trainingAndResult를 돌려서 학습전 결과와 학습 후 결과가 어떻게 다른지 확인하는 것
    if is_number(input_i):
       i = int(input_i)
-      #Test = x_train[i]
+      Test = x_train[i]
       label = np.argmax(y_train[i])
-      #img_show(Test)
+      img_show(Test)
       print("이 이미지의 실제 값 : ", label) #그림의 숫자와 동일
       SN = sn.singleLayer(W, Bias)
       y_predict = SN.ScoreFunction(x_test[i])
@@ -49,8 +49,8 @@ x_train, y_train, x_test, y_test = get_data()
 
 # W값과 Bias 값을 np.random.random 함수를 사용해 알맞게 넣어주십시오.(이 것만 빈칸 나머지는 제공)
 # 3.1
-W = np.random.random((784, 10))
-Bias = np.random.random(10)
+W = np.random.random((784,10))
+Bias = np.random.random((1,10))
 
 #i = input() # 자신이 원하는 숫자 넣기 가능
 i = 5
@@ -59,7 +59,7 @@ print("train 데이터의 {} 번째의 값 추출".format(i))
 Trainend = TestSN(i, x_train, y_train, x_test, y_test, W, Bias) # 위의 TestNN함수를 호출해 작업을 돌림.
 
 #밑에 것은 심심하면 자신이 트레이닝한 것이 잘되는지 실험해보세요.
-'''
+
 if Trainend !=False:
    TrainNN =Trainend
    print("몇 번 추론하실 겁니까?")
@@ -75,7 +75,5 @@ if Trainend !=False:
          print("이 이미지의 추론 값 : {}".format(np.argmax(Hypothesis)))
    else:
       print("iterator로 숫자를 안넣었습니다. 종료합니다.")
-
-'''
 
 
